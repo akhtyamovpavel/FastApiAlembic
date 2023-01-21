@@ -22,3 +22,22 @@ def get_user_by_email(db: Session, email: str):
 
 def get_users(db: Session):
     return db.query(models.User).all()
+
+
+def get_students(db: Session):
+    students = db.query(models.Student).all()
+    return students
+
+
+def create_student(db: Session, student: schemas.StudentCreate):
+
+    user = db.query(models.User).get(student.user_id)
+    db_student = models.Student(
+        user=user,
+        group_number=student.group_number
+    )
+
+    db.add(db_student)
+    db.commit()
+    db.refresh(db_student)
+    return db_student

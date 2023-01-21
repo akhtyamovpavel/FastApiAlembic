@@ -20,7 +20,7 @@ def get_db():
 
 
 @app.post('/user', response_model=schemas.User)
-def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail='User elready exist')
@@ -28,5 +28,18 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 
 @app.get('/users/', response_model=List[schemas.User])
-def get_users(db: Session = Depends(get_db)):
+async def get_users(db: Session = Depends(get_db)):
     return crud.get_users(db)
+
+
+@app.post('/student', response_model=schemas.Student)
+async def create_student(student: schemas.StudentCreate, db: Session = Depends(get_db)):
+    db_student = crud.create_student(db, student=student)
+    return db_student
+
+
+@app.get('/student', response_model=List[schemas.Student])
+async def get_students(db: Session = Depends(get_db)):
+    students = crud.get_students(db)
+    print(students)
+    return students

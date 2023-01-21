@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+import models
+
 
 class UserBase(BaseModel):
     email: str
@@ -13,3 +15,16 @@ class UserCreate(UserBase):
 class User(UserBase):
     class Config:
         orm_mode = True
+
+
+class Student(BaseModel):
+    user: User
+    group_number: str
+
+    class Config:
+        orm_mode = True
+
+
+class StudentCreate(BaseModel):
+    user_id: int
+    group_number: str
