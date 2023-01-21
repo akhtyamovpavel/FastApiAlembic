@@ -11,6 +11,8 @@ class User(Base):
     password_hash = Column(String)
     email = Column(VARCHAR(50))
 
+    first_name = Column(String)
+
 
 class Student(Base):
     __tablename__ = 'students'

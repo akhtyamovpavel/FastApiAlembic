@@ -1,3 +1,4 @@
+from typing import Union
 from pydantic import BaseModel
 
 import models
@@ -10,9 +11,12 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+    first_name: str
 
 
 class User(UserBase):
+    id: int
+    first_name: Union[str, None]
     class Config:
         orm_mode = True
 
@@ -20,6 +24,7 @@ class User(UserBase):
 class Student(BaseModel):
     user: User
     group_number: str
+    id: int
 
     class Config:
         orm_mode = True
