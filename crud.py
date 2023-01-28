@@ -31,6 +31,11 @@ def get_students(db: Session):
     return students
 
 
+def get_student(db: Session, id: int):
+    student = db.query(models.Student).get(id)
+    return student
+
+
 def create_student(db: Session, student: schemas.StudentCreate):
 
     user = db.query(models.User).get(student.user_id)

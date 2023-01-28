@@ -1,15 +1,23 @@
 from typing import List
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Request
 
 from db import Base, SessionLocal, engine
 import schemas
 from sqlalchemy.orm import Session
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 import crud
 
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+templates = Jinja2Templates(directory="templates")
 
 def get_db():
     db = SessionLocal()
@@ -43,3 +51,18 @@ async def get_students(db: Session = Depends(get_db)):
     students = crud.get_students(db)
     print(students)
     return students
+
+
+@app.get('/ui/student/{id}', response_class=HTMLResponse)
+async def get_student(
+    request: Request, id: int,
+    db: Session = Depends(get_db)
+):
+    student = crud.get_student(db, id)
+    return templates.TemplateResponse(
+        'student.html', {
+            'request': request,
+            'id': student.id,
+        }
+    )
+
