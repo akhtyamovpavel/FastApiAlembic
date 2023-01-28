@@ -1,0 +1,12 @@
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=akhtyamovpavel
+Group=akhtyamovpavel
+WorkingDirectory=/home/akhtyamovpavel/fastapi-sqlalchemy
+ExecStart=/home/akhtyamovpavel/AlembicEnv/bin/gunicorn -c config/gunicorn.conf.py main:app
+
+[Install]
+WantedBy=multi-user.target
